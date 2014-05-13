@@ -1,3 +1,11 @@
+#first made basic funtionality--printing a board on screen that can be updated
+# prompts users for names, asks players for input and prints and updates board
+#then added ability to tell when a player wins
+#then added coin flip, ability to play again
+#finally, added dumb computer player, can be improved upon
+
+#areas to improve: computer player (keep state of game?), refactoring, make startup cleaner--maybe tournament option, levels, 
+#more robust to user input, better interface, tic tac toe-ception
 
 import sys
 import random
@@ -11,8 +19,14 @@ def print_board(a,b,c,d,e,f,g,h,i):
 	print "----------"
 	print "%s | %s | %s" % (g,h,i)
 	
-def startup():	 
-	# this doesn't really have to be packaged as a function I guess, but it was looking kind of messy
+def startup():
+	# this doesn't really have to be packaged as a function I guess, but it was looking kind of messy	 
+	global player1 
+	global player2
+	global computer
+	global d
+	#packaging stuff into functions and moving it around caused some issues with variables 
+	# and declaring them global seemed to fix it but I'm not sure it's all necessary
 	print "Let's play tic tac toe"
 	print "Type 'computer' to play against the computer and 'friend' to play against a friend"
 	#choose between playing with a friend and against the computer
@@ -28,7 +42,6 @@ def startup():
 	if gametype.lower() == 'computer':
 		#set a variable to True to be used later when differences between friend/machine arise
 		computer = True
-		global computer
 		print "Great, you're playing against me"
 		print "What's your name?"
 		p1 = raw_input("> ")
@@ -52,11 +65,6 @@ def startup():
 	else:
 		player1 = p2
 		player2 = p1
-	#packaging stuff into functions and moving it around caused some issues with variables 
-	# and declaring them global seemed to fix it but 
-	#I'm not entirely sure if this is just a patch
-	global player1 
-	global player2
 	print "It was %s!" % result
 	# the choice of machine/friend makes the syntax awkward but doesn't seem worth 
 	#a whole different set of dialogue
@@ -72,7 +80,6 @@ def startup():
 	 #could also probably have created a list and used the index to look up elements 
 	 #later on when updating the board
 	d = dict(zip(['a','b','c','d','e','f','g','h','i'],range(1,10))) 
-	global d
 	print_board(d['a'],d['b'],d['c'],d['d'],d['e'],d['f'],d['g'],d['h'],d['i']) 
 	# do I want to have the board always show the numbers? it's potentially distracting
 
@@ -147,9 +154,9 @@ def startover():
 		startover()
 			
 def tic_tac_toe():
+	global turn
 	startup()
  	turn = 1
- 	global turn
  	while turn < 10: 
  		if turn %2 ==1:  #alternate players based on turn count
  			move(player1, 'X', turn)
